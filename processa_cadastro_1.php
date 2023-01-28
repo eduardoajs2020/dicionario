@@ -6,7 +6,7 @@ require_once("conexao.php");
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $CadSentenca = filter_input(INPUT_POST, 'CadSentenca');
 
-if($CadSentenca){
+if(isset($CadSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -51,7 +51,7 @@ if($CadSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $AltSentenca = filter_input(INPUT_POST, 'AltSentenca');
 
-if($AltSentenca){
+if(isset($AltSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -92,7 +92,7 @@ if($AltSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $DelSentenca = filter_input(INPUT_POST, 'DelSentenca');
 
-if($DelSentenca){
+if(isset($DelSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -128,12 +128,20 @@ if($DelSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $VerSentenca = filter_input(INPUT_POST, 'VerSentenca');
 
-if($VerSentenca){
+if(isset($VerSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
         $significado = filter_input(INPUT_POST, 'significado');
         $id = filter_input(INPUT_POST, 'id');
+
+//VALIDAÇÃO DE CAMPOS
+
+    if(empty($id)){ 
+
+         header("Location: errorid.php");
+}
+else{
 
 
   //MOSTRANDO OS DADOS DO BANCO DE DADOS
@@ -147,9 +155,11 @@ if($VerSentenca){
     $insert_msg-> execute();
 
     $result = $insert_msg->fetchAll();
-
-    foreach ($result as $value)
-
+     
+    foreach ($result as $value);    
+        
+    if($value == true){
+    
     {
       require_once('index.php');
 
@@ -175,7 +185,12 @@ if($VerSentenca){
      print_r("</tr>");
      print_r("</table>");
     }
-
+    
+  }
+  else{
+    header("Location: errorid.php");
+  }
+}
 
 }else{
       $_SESSION['msg'] = "<p style= 'color:green;'>Sucesso!</p>";
@@ -188,7 +203,7 @@ if($VerSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $ListaSentenca = filter_input(INPUT_POST, 'ListaSentenca');
 
-if($ListaSentenca){
+if(isset($ListaSentenca)){
 
 header("Location: show.php");
 

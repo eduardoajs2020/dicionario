@@ -5,11 +5,12 @@ body{
     background-color: mintcream;
     font-size: x-large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
- 
+
 }
 
 h1{
     color: brown ;
+    
 }
 
 input{
@@ -22,23 +23,38 @@ input{
 
 table{
     font-size: 20px;
-    width: 90% ;  
-    color:rgba(229, 12, 12, 0.895); 
+    /*color:rgba(229, 12, 12, 0.895);*/
+    color: maroon;
     margin: 60px;
     padding: 15px;
     padding-left: 40px;
-    
+    border-collapse: collapse;
+    width: 91%;
+
 }
 
 td{
-    border: 2px solid blue;
-    border-radius: 5px;
+    text-align: left;
+    padding: 8px;
+    margin: 60px;
+
+}
+th {
+    background-color: brown;
+    color: aliceblue;
+    text-align: left;
+    padding: 8px;
+    margin: 60px;}
+
+tr:nth-child(even) {
+    background-color: gainsboro;
 }
 
-th{
-    border: 2px solid blue;
-    border-radius: 5px;        
+.cabecalho{
+    background-color: brown;
+    color: aliceblue;
 }
+
 
 .buttom{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -50,7 +66,7 @@ th{
 }
 
 .form-container{
-    background-color:whitesmoke;
+    background-color:gainsboro;
     /*background-image: url('dicionario-de-ingles.jpg');*/
     margin: 60px;
     padding: 15px;
@@ -60,7 +76,6 @@ th{
 
 .home{
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    text-decoration: none;
     display: inline-block;
     color: black;
     margin: 10px;
@@ -70,5 +85,11 @@ th{
 
 .home a:hover{
     transition: 0.5s;
-    color: crimson;
+    color: red;
+}
+.msg-erro{
+    margin: auto;
+    margin-left: 20px;
+    padding: auto;
+    
 }

@@ -5,7 +5,7 @@ require_once("conexao.php");
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $CadSentenca = filter_input(INPUT_POST, 'CadSentenca');
 
-if($CadSentenca){
+if(isset($CadSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -50,7 +50,7 @@ if($CadSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $AltSentenca = filter_input(INPUT_POST, 'AltSentenca');
 
-if($AltSentenca){
+if(isset($AltSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -91,7 +91,7 @@ if($AltSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $DelSentenca = filter_input(INPUT_POST, 'DelSentenca');
 
-if($DelSentenca){
+if(isset($DelSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');
@@ -127,7 +127,7 @@ if($DelSentenca){
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $VerSentenca = filter_input(INPUT_POST, 'VerSentenca');
 
-if($VerSentenca){
+if(isset($VerSentenca)){
 
       //RECEBENDO DADOS DO FORMULARIO
         $palavra = filter_input(INPUT_POST, 'palavra');

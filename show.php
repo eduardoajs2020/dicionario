@@ -2,7 +2,7 @@
 <?php require_once("index.php");?>
 
 <table>
-  <tr>
+  <tr class="cabecalho">
     <td><strong>NUMERO</strong></td>
     <td><strong>PALAVRA</strong></td>
     <td><strong>SIGNIFICADO</strong></td> 
