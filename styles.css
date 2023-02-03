@@ -1,6 +1,6 @@
 body{
     color: black;
-    border: 2px solid blue;
+    border: 2px solid gray;
     border-radius: 10px;
     background-color: mintcream;
     font-size: x-large;
@@ -16,14 +16,13 @@ h1{
 input{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 24px;
-    color: blue;
+    color: gray;
     background-color:#fff;
     border-radius: 10px;
 }
 
 table{
     font-size: 20px;
-    /*color:rgba(229, 12, 12, 0.895);*/
     color: maroon;
     margin: 60px;
     padding: 15px;
@@ -39,12 +38,14 @@ td{
     margin: 60px;
 
 }
+
 th {
     background-color: brown;
     color: aliceblue;
     text-align: left;
     padding: 8px;
-    margin: 60px;}
+    margin: 60px;
+}
 
 tr:nth-child(even) {
     background-color: gainsboro;
@@ -60,36 +61,137 @@ tr:nth-child(even) {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 24px;
     color: #fff;
-    /*background-color: rgb(108, 93, 9);*/
     background-color: brown;
     border-radius: 10px;
 }
 
+.buttom a:hover{
+    transition: 0.5s;
+    color: red;
+}
+
 .form-container{
     background-color:gainsboro;
-    /*background-image: url('dicionario-de-ingles.jpg');*/
     margin: 60px;
+    margin-top: 15px;
+    padding: 15px;
+    padding-left: 60px;
+    border-radius: 5px;
+}
+
+.form-container-b {
+    background-color: black;
+    color: #fff;
+    margin: 60px;
+    margin-top: 15px;
     padding: 15px;
     padding-left: 60px;
     border-radius: 5px;
 }
 
 .home{
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    display: inline-block;
-    color: black;
-    margin: 10px;
-    padding: 10px;
-    padding-left: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-flex;
+    text-decoration: none;
+    text-align:right;
+    color: #fff;
+    background-color: brown;
+    border-radius: 15px;
+    margin: 25px;
+    margin-left: flex;
+    padding: 15px;
+    
 }
 
-.home a:hover{
+.home a:hover {
     transition: 0.5s;
-    color: red;
+    color: yellow;
 }
 .msg-erro{
     margin: auto;
-    margin-left: 20px;
+    margin-left: 200px;
     padding: auto;
+    color: brown;
     
 }
+.msg-erro a:hover {
+    transition: 0.5s;
+    color: red;
+}
+.paginacao{
+    display: inline;
+    color: #fff;
+
+}
+
+.paginator{
+    display: inline;
+    list-style: none;
+    padding: 5px 10px;
+    margin: 10px;
+    background-color: brown;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+}
+/*
+@media all {
+    h1{
+        font-size: auto;
+    }
+    body{
+        max-width: auto;
+        max-height: auto;
+    }
+    .input{
+        max-width: auto;
+        max-height: auto;
+    }
+    .form-container, .form-container-b{
+        max-width: auto;
+        max-height: auto;
+        margin: auto;
+        margin-top: auto;
+        padding: auto;
+        padding-left: auto;
+    }
+    .buttom{
+        font-size: auto;
+    }
+
+    table {
+            font-size: auto;
+            margin: auto;
+            padding: auto;
+            padding-left: auto;
+            width: auto;
+
+    }
+
+        td {
+            text-align: auto;
+            padding: auto;
+            margin: auto;
+    
+        }
+    
+        th {
+            text-align: auto;
+            padding: auto;
+            margin: auto;
+        }
+
+        .msg-erro {
+                    margin: auto;
+                    padding: auto;
+                  
+    }
+    .paginator {
+            padding: auto;
+            margin: auto;     
+            font-size: auto;
+    }         
+           
+}*/

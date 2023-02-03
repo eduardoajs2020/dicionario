@@ -11,8 +11,8 @@
   <title>Dicionario de TI</title>
 </head>
 <body>
-  <div><a class="home" href="index.php"> Retornar ao inicio </a></div>
-  <div class="form-container">
+  <div><a class="home-b" href="index_b.php"> Retornar ao inicio </a></div>
+  <div class="form-container-b">
    <h1>Palavras do dicionario:</h1>
   <?php
   if(isset($_SESSION['msg'])){

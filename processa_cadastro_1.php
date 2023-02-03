@@ -13,6 +13,13 @@ if(isset($CadSentenca)){
         $significado = filter_input(INPUT_POST, 'significado');
          $id = filter_input(INPUT_POST, 'id');
 
+         //VALIDAÇÃO DE CAMPOS
+
+    if(empty($id)){ 
+
+         header("Location: errorid.php");
+}
+    else{
 
   //ALTERANDO OS DADOS NO BANCO DE DADOS
 
@@ -46,7 +53,7 @@ if(isset($CadSentenca)){
 
 }
 
-
+}
 
 //VERIFICA SE O USUÁRIO CLICOU NO BOTÃO DO FORMULARIO
 $AltSentenca = filter_input(INPUT_POST, 'AltSentenca');
@@ -141,7 +148,7 @@ if(isset($VerSentenca)){
 
          header("Location: errorid.php");
 }
-else{
+    else{
 
 
   //MOSTRANDO OS DADOS DO BANCO DE DADOS
