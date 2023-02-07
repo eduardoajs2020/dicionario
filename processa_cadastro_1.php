@@ -173,7 +173,7 @@ if(isset($VerSentenca)){
      // CABEÇALHO DA TABELA
      print_r("<table>");
      print_r("<tr>");
-     print_r("<th><strong>NUMERO</strong></th>");
+    // print_r("<th><strong>NUMERO</strong></th>");
      print_r("<th><strong>PALAVRA</strong></th>");
      print_r("<th><strong>SIGNIFICADO</strong></th>");
      print_r("</tr>");
@@ -186,7 +186,7 @@ if(isset($VerSentenca)){
 
     //TABELA
      print_r("<tr>");
-     print_r("<td>$id</td>");
+    // print_r("<td>$id</td>");
      print_r("<td>$palavra</td>");
      print_r("<td>$significado</td>");
      print_r("</tr>");

@@ -7,7 +7,7 @@ require_once("pagination.php");
 
 <table>
   <tr class="cabecalho">
-    <td><strong>NUMERO</strong></td>
+    <!--<td><strong>NUMERO</strong></td>-->
     <td><strong>PALAVRA</strong></td>
     <td><strong>SIGNIFICADO</strong></td> 
   </tr>
@@ -25,7 +25,7 @@ $result = $sql->fetchAll();
 
 foreach($result as $values){?>
   <tr>
-    <td><?=$values['id']?></td>
+    <!--<td><?=$values['id']?></td>-->
     <td><?=$values['palavra']?></td>
     <td><?=$values['significado']?></td>
 <?php  }?>
