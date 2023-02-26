@@ -34,6 +34,8 @@ foreach($result as $values){?>
 
 <?php 
 
+
+
 //PAGINADOR
 
 $sqlNav = $conn->query("SELECT * FROM dicionario 

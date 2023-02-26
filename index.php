@@ -37,11 +37,25 @@
     <input class="buttom" name="DelSentenca" type="submit" value="Excluir">
     <input class="buttom" name="VerSentenca" type="submit" value="Lista por Número">
     <input class="buttom" name="ListaSentenca" type="submit" value="Lista Todas">
+    <div><a class="buttom" name="MostraSentenca" href="showPalavra" value="Lista por Palavra">Lista por Palavra</a></div>
+    
+    
 
   </form>
   </div>
   <script>
-        
+        var search = document.getElementById('palavra');
+
+        search.addEventListener("Keydown", function(event){
+          if (event.key === "Enter"){
+            searchData();
+          }
+        });
+
+        function searchData()
+        {
+          window.location = 'showPalavra.php'+search.value;
+        }
   </script>
 
 </body>
