@@ -1,0 +1,29 @@
+services:
+
+
+  php:
+
+    build: .
+
+    ports:
+
+      - "8080:80"
+
+    depends_on:
+
+      - mysql
+
+
+  mysql:
+
+    image: mysql:8
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: root
+
+      MYSQL_DATABASE: appdb
+
+    ports:
+
+      - "3306:3306"
