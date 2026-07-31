@@ -1,150 +1,172 @@
-name: CI-CD Dicionario
+name: CI/CD Dicionario PHP
+
 
 on:
-    push:
-        branches:
-            - main
 
-            - master
+  push:
 
-    pull_request:
-        branches:
-            - main
+    branches:
 
-            - master
+      - main
 
-env:
-    IMAGE_NAME: dicionario
+      - master
+
+
+  pull_request:
+
+    branches:
+
+      - main
+
+      - master
+
+
+  workflow_dispatch:
+
+
+permissions:
+
+  contents: read
+
+  packages: write
+
 
 jobs:
-    validate:
-        runs-on: ubuntu-latest
 
-        services:
-            mysql:
-                image: mysql:8.0
+  validate:
 
-                env:
-                    MYSQL_ROOT_PASSWORD: root
+    name: Validar PHP e banco MySQL
 
-                    MYSQL_DATABASE: appdb
-
-                ports:
-                    - 3306:3306
-
-                options: >-
-
-                    --health-cmd="mysqladmin ping -h localhost -proot"
-
-                    --health-interval=10s
-
-                    --health-timeout=5s
-
-                    --health-retries=10
-
-        steps:
-            - name: Checkout
-
-              uses: actions/checkout@v4
-
-            - name: Setup PHP
-
-              uses: shivammathur/setup-php@v2
-
-              with:
-                  php-version: "8.3"
-
-            - name: Validar sintaxe PHP
-
-              run: |
+    runs-on: ubuntu-latest
 
 
-                  find . -name "*.php" -print0 |
+    env:
 
-                  xargs -0 -n1 php -l
+      DB_HOST: 127.0.0.1
 
-            - name: Instalar Cliente MySQL
-
-              run: |
+      DB_PORT: 3306
 
 
-                  sudo apt-get update
+      DB_NAME: ${{ secrets.DB_NAME }}
 
-                  sudo apt-get install -y mysql-client
+      DB_USER: ${{ secrets.DB_USER }}
 
-            - name: Criar tabela dicionario
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-              run: |
-
-
-                  mysql -h 127.0.0.1 -uroot -proot appdb <<EOF
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
 
-                  CREATE TABLE IF NOT EXISTS dicionario(
+    services:
 
-                      id INT AUTO_INCREMENT PRIMARY KEY,
+      mysql:
 
-                      palavra VARCHAR(255) NOT NULL,
-
-                      significado TEXT NOT NULL
-
-                  );
+        image: mysql:8.0
 
 
-                  EOF
+        env:
 
-            - name: Validar estrutura
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
 
-              run: |
+          MYSQL_USER: ${{ secrets.DB_USER }}
 
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-                  mysql -h 127.0.0.1 -uroot -proot appdb \
-
-                  -e "SHOW TABLES;"
-
-    docker:
-        runs-on: ubuntu-latest
-
-        needs:
-            - validate
-
-        permissions:
-            contents: read
-
-            packages: write
-
-        steps:
-            - name: Checkout
-
-              uses: actions/checkout@v4
-
-            - name: Login GHCR
-
-              uses: docker/login-action@v3
-
-              with:
-                  registry: ghcr.io
-
-                  username: ${{ github.actor }}
-
-                  password: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Build Image
-
-              run: |
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
 
-                  docker build \
+        ports:
 
-                  -t ghcr.io/${{ github.repository }}/dicionario:latest \
-
-                  .
-
-            - name: Push Image
-
-              run: |
+          - 3306:3306
 
 
-                  docker push \
+        options: >-
 
-                  ghcr.io/${{ github.repository }}/dicionario:latest
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+
+          --health-interval=10s
+
+          --health-timeout=5s
+
+          --health-retries=20
+
+          --health-start-period=30s
+
+
+    steps:
+
+      - name: Checkout do repositório
+
+        uses: actions/checkout@v4
+
+
+      - name: Validar configuração obrigatória
+
+        shell: bash
+
+        run: |
+
+          set -euo pipefail
+
+
+          variaveis=(
+
+            DB_NAME
+
+            DB_USER
+
+            DB_PASSWORD
+
+            MYSQL_ROOT_PASSWORD
+
+          )
+
+
+          for variavel in "${variaveis[@]}"; do
+
+            if [ -z "${!variavel:-}" ]; then
+
+              echo "::error::A variável ou secret $variavel não foi configurada."
+
+              exit 1
+
+            fi
+
+          done
+
+
+          echo "Secrets obrigatórios disponíveis."
+
+
+      - name: Configurar PHP
+
+        uses: shivammathur/setup-php@v2
+
+        with:
+
+          php-version: "8.3"
+
+          extensions: pdo, pdo_mysql, mysqli
+
+          coverage: none
+
+
+      - name: Validar extensões PHP
+
+        shell: bash
+
+        run: |
+
+          set -euo pipefail
+
+
+          php --version
+
+          php -m | grep -i '^PDO$'
+
+          php -m | grep -i '^pdo_mysql$'
+
+          php -m | grep -i '^mysqli$'
+
+
+      - name:
+ 
