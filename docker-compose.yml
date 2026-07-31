@@ -3,186 +3,29 @@ services:
 
   mysql:
 
-    image: mysql:8.4
 
+    image: mysql:8.0
 
-   name: CI/CD Dicionario PHP
 
+    container_name: dicionario-mysql
 
-on:
 
-  push:
+    restart: unless-stopped
 
-    branches:
 
-      - main
+    environment:
 
-      - master
 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
-  pull_request:
 
-    branches:
+      MYSQL_DATABASE: ${DB_NAME}
 
-      - main
 
-      - master
+      MYSQL_USER: ${DB_USER}
 
 
-  workflow_dispatch:
-
-
-permissions:
-
-  contents: read
-
-  packages: write
-
-
-jobs:
-
-  validate:
-
-    name: Validar PHP e banco MySQL
-
-    runs-on: ubuntu-latest
-
-
-    env:
-
-      DB_HOST: 127.0.0.1
-
-      DB_PORT: 3306
-
-
-      DB_NAME: ${{ secrets.DB_NAME }}
-
-      DB_USER: ${{ secrets.DB_USER }}
-
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-
-
-    services:
-
-      mysql:
-
-        image: mysql:8.0
-
-
-        env:
-
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-
-          MYSQL_USER: ${{ secrets.DB_USER }}
-
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-
-
-        ports:
-
-          - 3306:3306
-
-
-        options: >-
-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
-
-          --health-interval=10s
-
-          --health-timeout=5s
-
-          --health-retries=20
-
-          --health-start-period=30s
-
-
-    steps:
-
-      - name: Checkout do repositório
-
-        uses: actions/checkout@v4
-
-
-      - name: Validar configuração obrigatória
-
-        shell: bash
-
-        run: |
-
-          set -euo pipefail
-
-
-          variaveis=(
-
-            DB_NAME
-
-            DB_USER
-
-            DB_PASSWORD
-
-            MYSQL_ROOT_PASSWORD
-
-          )
-
-
-          for variavel in "${variaveis[@]}"; do
-
-            if [ -z "${!variavel:-}" ]; then
-
-              echo "::error::A variável ou secret $variavel não foi configurada."
-
-              exit 1
-
-            fi
-
-          done
-
-
-          echo "Secrets obrigatórios disponíveis."
-
-
-      - name: Configurar PHP
-
-        uses: shivammathur/setup-php@v2
-
-        with:
-
-          php-version: "8.3"
-
-          extensions: pdo, pdo_mysql, mysqli
-
-          coverage: none
-
-
-      - name: Validar extensões PHP
-
-        shell: bash
-
-        run: |
-
-          set -euo pipefail
-
-
-          php --version
-
-          php -m | grep -i '^PDO$'
-
-          php -m | grep -i '^pdo_mysql$'
-
-          php -m | grep -i '^mysqli$'
-
-
-      - name:
- 
-
-
-    volumes:
-
-      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      MYSQL_PASSWORD: ${DB_PASSWORD}
 
 
     ports:
@@ -190,9 +33,52 @@ jobs:
       - "3306:3306"
 
 
+    volumes:
+
+
+      - mysql_data:/var/lib/mysql
+
+
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+
+
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+
+
+    healthcheck:
+
+
+      test: [
+
+        "CMD-SHELL",
+
+        "mysqladmin ping -h localhost -uroot -p${MYSQL_ROOT_PASSWORD} --silent"
+
+      ]
+
+
+      interval: 10s
+
+
+      timeout: 5s
+
+
+      retries: 20
+
+
+      start_period: 30s
+
+
   php:
 
+
     build: .
+
+
+    container_name: dicionario-php
+
+
+    restart: unless-stopped
 
 
     ports:
@@ -200,12 +86,40 @@ jobs:
       - "8080:80"
 
 
+    environment:
+
+
+      DB_HOST: mysql
+
+
+      DB_PORT: 3306
+
+
+      DB_NAME: ${DB_NAME}
+
+
+      DB_USER: ${DB_USER}
+
+
+      DB_PASSWORD: ${DB_PASSWORD}
+
+
     depends_on:
 
-      - mysql
+
+      mysql:
+
+        condition: service_healthy
 
 
     volumes:
 
+
       - .:/var/www/html
+
+
+volumes:
+
+
+  mysql_data:
  
