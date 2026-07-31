@@ -81,7 +81,7 @@ jobs:
 
         options: >-
 
-          --health-cmd="mysqladmin ping -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} --silent"
+          --health-cmd="mysqladmin ping -uroot -p ${{ secrets.MYSQL_ROOT_PASSWORD }} --silent"
 
           --health-interval=10s
 
