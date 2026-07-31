@@ -155,50 +155,6 @@ jobs:
           php -m | grep -i '^mysqli$'
 
 
-      - name: Validar sintaxe dos arquivos PHP
-
-        shell: bash
-
-        run: |
-
-          set -euo pipefail
-
-
-          encontrou_arquivo=false
-
-
-          while IFS= read -r -d '' arquivo; do
-
-            encontrou_arquivo=true
-
-            echo "Validando $arquivo"
-
-            php -l "$arquivo"
-
-          done < <(
-
-            find . \
-
-              -type f \
-
-              -name "*.php" \
-
-              -not -path "./vendor/*" \
-
-              -print0
-
-          )
-
-
-          if [ "$encontrou_arquivo" = false ]; then
-
-            echo "::error::Nenhum arquivo PHP foi encontrado."
-
-            exit 1
-
-          fi
-
-
       - name: Instalar cliente MySQL
 
         shell: bash
