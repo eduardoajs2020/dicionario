@@ -78,19 +78,8 @@ jobs:
 
           - 3306:3306
 
-
-        options: >-
-
-          --health-cmd="mysqladmin ping -uroot -p ${{ secrets.MYSQL_ROOT_PASSWORD }} --silent"
-
-          --health-interval=10s
-
-          --health-timeout=10s
-
-          --health-retries=30
-
-
     steps:
+        
 
       - name: Checkout do repositório
 

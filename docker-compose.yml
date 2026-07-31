@@ -52,7 +52,7 @@ services:
 
         "CMD-SHELL",
 
-        "mysqladmin ping -h localhost -uroot -p${MYSQL_ROOT_PASSWORD} --silent"
+        "mysqladmin ping -h localhost -uroot -p ${MYSQL_ROOT_PASSWORD} --silent"
 
       ]
 
