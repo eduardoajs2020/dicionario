@@ -81,15 +81,13 @@ jobs:
 
         options: >-
 
-          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-cmd="mysqladmin ping -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} --silent"
 
           --health-interval=10s
 
-          --health-timeout=5s
+          --health-timeout=10s
 
-          --health-retries=20
-
-          --health-start-period=30s
+          --health-retries=30
 
 
     steps:

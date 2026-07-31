@@ -3,7 +3,7 @@
 
 $db_name = "appdb";
 $db_host = "mysql";
-$db_user = "root";
+$db_user = "dicionario";
 $db_pass = "root";
 
 
