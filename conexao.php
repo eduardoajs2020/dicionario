@@ -1,10 +1,10 @@
 <?php
 //Credenciais de acesso ao BD
 
-$db_name = "dicionario_ti";
-$db_host = "localhost";
+$db_name = "appdb";
+$db_host = "mysql";
 $db_user = "root";
-$db_pass = "10205618";
+$db_pass = "root";
 
 
 $conn = new PDO("mysql:dbname=".$db_name.";host=".$db_host, $db_user, $db_pass);

@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS dicionario(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    palavra VARCHAR(255) NOT NULL,
+    significado TEXT NOT NULL
+);
