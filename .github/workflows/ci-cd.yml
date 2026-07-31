@@ -1,193 +1,150 @@
 name: CI-CD Dicionario
 
-
 on:
+    push:
+        branches:
+            - main
 
-  push:
+            - master
 
-    branches:
+    pull_request:
+        branches:
+            - main
 
-      - main
-
-      - master
-
-
-  pull_request:
-
-    branches:
-
-      - main
-
-      - master
-
+            - master
 
 env:
-
-  IMAGE_NAME: dicionario
-
+    IMAGE_NAME: dicionario
 
 jobs:
+    validate:
+        runs-on: ubuntu-latest
 
+        services:
+            mysql:
+                image: mysql:8.0
 
-  validate:
+                env:
+                    MYSQL_ROOT_PASSWORD: root
 
-    runs-on: ubuntu-latest
+                    MYSQL_DATABASE: appdb
 
+                ports:
+                    - 3306:3306
 
-    services:
+                options: >-
 
-      mysql:
+                    --health-cmd="mysqladmin ping -h localhost -proot"
 
-        image: mysql:8.0
+                    --health-interval=10s
 
-        env:
+                    --health-timeout=5s
 
-          MYSQL_ROOT_PASSWORD: root
+                    --health-retries=10
 
-          MYSQL_DATABASE: appdb
+        steps:
+            - name: Checkout
 
-        ports:
+              uses: actions/checkout@v4
 
-          - 3306:3306
+            - name: Setup PHP
 
+              uses: shivammathur/setup-php@v2
 
-        options: >-
+              with:
+                  php-version: "8.3"
 
-          --health-cmd="mysqladmin ping -h localhost -proot"
+            - name: Validar sintaxe PHP
 
-          --health-interval=10s
+              run: |
 
-          --health-timeout=5s
 
-          --health-retries=10
+                  find . -name "*.php" -print0 |
 
+                  xargs -0 -n1 php -l
 
-    steps:
+            - name: Instalar Cliente MySQL
 
+              run: |
 
-      - name: Checkout
 
-        uses: actions/checkout@v4
+                  sudo apt-get update
 
+                  sudo apt-get install -y mysql-client
 
-      - name: Setup PHP
+            - name: Criar tabela dicionario
 
-        uses: shivammathur/setup-php@v2
+              run: |
 
-        with:
 
-          php-version: '8.3'
+                  mysql -h 127.0.0.1 -uroot -proot appdb <<EOF
 
 
-      - name: Validar sintaxe PHP
+                  CREATE TABLE IF NOT EXISTS dicionario(
 
-        run: |
+                      id INT AUTO_INCREMENT PRIMARY KEY,
 
+                      palavra VARCHAR(255) NOT NULL,
 
-          find . -name "*.php" -print0 |
+                      significado TEXT NOT NULL
 
-          xargs -0 -n1 php -l
+                  );
 
 
-      - name: Instalar Cliente MySQL
+                  EOF
 
-        run: |
+            - name: Validar estrutura
 
+              run: |
 
-          sudo apt-get update
 
-          sudo apt-get install -y mysql-client
+                  mysql -h 127.0.0.1 -uroot -proot appdb \
 
+                  -e "SHOW TABLES;"
 
-      - name: Criar tabela dicionario
+    docker:
+        runs-on: ubuntu-latest
 
-        run: |
+        needs:
+            - validate
 
+        permissions:
+            contents: read
 
-          mysql -h 127.0.0.1 -uroot -proot appdb <<EOF
+            packages: write
 
+        steps:
+            - name: Checkout
 
-          CREATE TABLE IF NOT EXISTS dicionario(
+              uses: actions/checkout@v4
 
-              id INT AUTO_INCREMENT PRIMARY KEY,
+            - name: Login GHCR
 
-              palavra VARCHAR(255) NOT NULL,
+              uses: docker/login-action@v3
 
-              significado TEXT NOT NULL
+              with:
+                  registry: ghcr.io
 
-          );
+                  username: ${{ github.actor }}
 
+                  password: ${{ secrets.GITHUB_TOKEN }}
 
-          EOF
+            - name: Build Image
 
+              run: |
 
-      - name: Validar estrutura
 
-        run: |
+                  docker build \
 
+                  -t ghcr.io/${{ github.repository }}/dicionario:latest \
 
-          mysql -h 127.0.0.1 -uroot -proot appdb \
+                  .
 
-          -e "SHOW TABLES;"
+            - name: Push Image
 
+              run: |
 
-  docker:
 
+                  docker push \
 
-    runs-on: ubuntu-latest
-
-
-    needs:
-
-      - validate
-
-
-    permissions:
-
-      contents: read
-
-      packages: write
-
-
-    steps:
-
-
-      - name: Checkout
-
-        uses: actions/checkout@v4
-
-
-      - name: Login GHCR
-
-        uses: docker/login-action@v3
-
-        with:
-
-          registry: ghcr.io
-
-          username: ${{ github.actor }}
-
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - name: Build Image
-
-        run: |
-
-
-          docker build \
-
-          -t ghcr.io/${{ github.repository }}/dicionario:latest \
-
-          .
-
-
-      - name: Push Image
-
-        run: |
-
-
-          docker push \
-
-          ghcr.io/${{ github.repository }}/dicionario:latest
- 
+                  ghcr.io/${{ github.repository }}/dicionario:latest
